@@ -1,0 +1,6 @@
+2023-05-27 11:53:29 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "dottore" not found; SQL statement:
+select dottore0_."id" as id1_0_, dottore0_."codfiscalepazienteattualmenteinvisita" as codfisca2_0_, dottore0_."codicedottore" as codicedo3_0_, dottore0_."cognome" as cognome4_0_, dottore0_."inservizio" as inserviz5_0_, dottore0_."invisita" as invisita6_0_, dottore0_."nome" as nome7_0_ from "dottore" dottore0_ [42102-200]
+2023-05-27 11:53:33 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "dottore" not found; SQL statement:
+insert into "dottore" ("id", "codfiscalepazienteattualmenteinvisita", "codicedottore", "cognome", "inservizio", "invisita", "nome") values (default, ?, ?, ?, ?, ?, ?) [42102-200]
