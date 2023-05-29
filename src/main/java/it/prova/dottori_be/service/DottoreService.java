@@ -19,5 +19,7 @@ public interface DottoreService {
 	public void elimina(Long id);
 
 	public Page<Dottore> findByExampleWithPagination(Dottore example, Integer pageNo, Integer pageSize, String sortBy);
+	
+	public Dottore findByCodiceDottore(String codiceDottore);
 
 }

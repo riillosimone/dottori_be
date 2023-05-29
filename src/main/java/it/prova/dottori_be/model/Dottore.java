@@ -38,4 +38,6 @@ public class Dottore {
 	@Column(name = "inservizio")
 	private Boolean inServizio;
 	
+	
+	
 }

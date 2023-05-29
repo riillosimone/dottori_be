@@ -34,11 +34,11 @@ public class DottoreController {
 		return DottoreDTO.createDottoreDTOListFromModelList(service.listAllElements());
 	}
 	
-	@GetMapping("/{id}")
-	public DottoreDTO getOne(@PathVariable(value = ("id"),required = true) Long id) {
-		return DottoreDTO.buildDottoreDTOFromModel(service.caricaSingoloElemento(id));
-	}
-	
+//	@GetMapping("/{id}")
+//	public DottoreDTO getOne(@PathVariable(value = ("id"),required = true) Long id) {
+//		return DottoreDTO.buildDottoreDTOFromModel(service.caricaSingoloElemento(id));
+//	}
+//	
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
 	public DottoreDTO createNew(@Valid @RequestBody(required = true) DottoreDTO dottoreInput) {
@@ -68,5 +68,11 @@ public class DottoreController {
 		dottoreInput.setId(id);
 		Dottore dottoreAggiornato = service.aggiorna(dottoreInput.buildModel());
 		return DottoreDTO.buildDottoreDTOFromModel(dottoreAggiornato);
-	} 
+	}
+	
+	@GetMapping("/{codiceDottore}")
+	public DottoreDTO findByCodiceDottore(@PathVariable(value = ("codiceDottore"),required = true) String codiceDottore) {
+		return DottoreDTO.buildDottoreDTOFromModel(service.findByCodiceDottore(codiceDottore));
+	}
+	
 }

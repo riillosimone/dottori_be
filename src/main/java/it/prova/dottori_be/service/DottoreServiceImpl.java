@@ -17,7 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import it.prova.dottori_be.model.Dottore;
 import it.prova.dottori_be.repository.DottoreRepository;
-
+import it.prova.dottori_be.web.api.exception.DottoreOccupatoException;
 
 @Service
 @Transactional(readOnly = true)
@@ -25,7 +25,7 @@ public class DottoreServiceImpl implements DottoreService {
 
 	@Autowired
 	private DottoreRepository repository;
-	
+
 	@Override
 	public List<Dottore> listAllElements() {
 		return (List<Dottore>) repository.findAll();
@@ -45,12 +45,19 @@ public class DottoreServiceImpl implements DottoreService {
 	@Override
 	@Transactional
 	public Dottore inserisciNuovo(Dottore dottoreInstance) {
+		dottoreInstance.setInServizio(true);
+		dottoreInstance.setInVisita(true);
 		return repository.save(dottoreInstance);
 	}
 
 	@Override
 	@Transactional
 	public void elimina(Long id) {
+		Dottore dottoreCaricato = this.caricaSingoloElemento(id);
+		if (dottoreCaricato.getInServizio() == true || dottoreCaricato.getInVisita() == true) {
+			throw new DottoreOccupatoException(
+					"Attenzione! Al momento il dottore che stai cercando di rimuovere è occupato. Riprova più tardi.");
+		}
 		repository.deleteById(id);
 	}
 
@@ -86,6 +93,11 @@ public class DottoreServiceImpl implements DottoreService {
 			paging = PageRequest.of(pageNo, pageSize, Sort.by(sortBy));
 
 		return repository.findAll(specificationCriteria, paging);
+	}
+
+	@Override
+	public Dottore findByCodiceDottore(String codiceDottore) {
+		return repository.findByCodiceDottore(codiceDottore);
 	}
 
 }
