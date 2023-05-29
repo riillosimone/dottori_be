@@ -46,18 +46,13 @@ public class DottoreServiceImpl implements DottoreService {
 	@Transactional
 	public Dottore inserisciNuovo(Dottore dottoreInstance) {
 		dottoreInstance.setInServizio(true);
-		dottoreInstance.setInVisita(true);
 		return repository.save(dottoreInstance);
 	}
 
 	@Override
 	@Transactional
 	public void elimina(Long id) {
-		Dottore dottoreCaricato = this.caricaSingoloElemento(id);
-		if (dottoreCaricato.getInServizio() == true || dottoreCaricato.getInVisita() == true) {
-			throw new DottoreOccupatoException(
-					"Attenzione! Al momento il dottore che stai cercando di rimuovere è occupato. Riprova più tardi.");
-		}
+
 		repository.deleteById(id);
 	}
 
@@ -98,6 +93,47 @@ public class DottoreServiceImpl implements DottoreService {
 	@Override
 	public Dottore findByCodiceDottore(String codiceDottore) {
 		return repository.findByCodiceDottore(codiceDottore);
+	}
+
+	@Override
+	@Transactional
+	public Dottore impostaInVisita(Dottore dottoreInstance) {
+		
+		Dottore result = this.findByCodiceDottore(dottoreInstance.getCodiceDottore());
+
+		result.setCodFiscalePazienteAttualmenteInVisita(dottoreInstance.getCodFiscalePazienteAttualmenteInVisita());
+
+		result.setInVisita(true);
+
+		return repository.save(result);
+	}
+
+	
+	
+	
+	@Override
+	public boolean verificaDisponibilita(String codiceDottore) {
+		Dottore dottore = this.findByCodiceDottore(codiceDottore);
+		if (dottore.getInServizio() == true && (dottore.getInVisita() == false) ) {
+			return true;
+		}
+		return false;
+	}
+
+	@Override
+	@Transactional
+	public Dottore terminaVisita(Dottore dottoreInput) {
+		
+		Dottore result = this.findByCodiceDottore(dottoreInput.getCodiceDottore());
+		
+		if (!dottoreInput.getCodFiscalePazienteAttualmenteInVisita().equals(result.getCodFiscalePazienteAttualmenteInVisita())) {
+			throw new DottoreOccupatoException("Attenzione! Dottore e paziente non sono associati");
+		}
+		
+		result.setCodFiscalePazienteAttualmenteInVisita(null);
+		result.setInVisita(false);
+
+		return repository.save(result);
 	}
 
 }

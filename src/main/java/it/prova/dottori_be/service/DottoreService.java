@@ -22,4 +22,11 @@ public interface DottoreService {
 	
 	public Dottore findByCodiceDottore(String codiceDottore);
 
+	public Dottore impostaInVisita (Dottore dottoreInstance);
+	
+	public boolean verificaDisponibilita(String codiceDottore);
+	
+	public Dottore terminaVisita(Dottore dottoreInput);
+	
+	
 }
